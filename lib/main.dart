@@ -1,6 +1,7 @@
 import 'package:coronavirus_rest_api_flutter_course/app/repositories/data_repository.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/services/api.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/services/api_service.dart';
+import 'package:coronavirus_rest_api_flutter_course/app/ui/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Color(0xFF101010),
           cardColor: Color(0xFF222222),
         ),
-        home: MyHomePage(title: 'Flutter Demo Home Page'),
+        // home: MyHomePage(title: 'Flutter Demo Home Page'),
+        home: Dashboard(),
       ),
     );
   }
