@@ -10,27 +10,42 @@ class DataRepository {
 
   String _accessToken;
 
-  Future<int> getEndpointData(Endpoint endpoint) async {
-    try {
+  //Method for calling an specific endpoint
+  Future<int> getEndpointData(Endpoint endpoint) async => 
+    await _getDataRefreshingToken<int>(
+      onGetData: () => apiService.getEndpointData(
+        accessToken: _accessToken, 
+        endpoint: endpoint)
+    );
 
+  //Method for calling all endpoints
+  Future<EndpointsData> getAllEndpointData() async =>
+    await _getDataRefreshingToken<EndpointsData>(
+      // onGetData: () => _getAllEndpointsData(), The same as below as the two functions have the same signature. Short hand syntax used.
+      onGetData: _getAllEndpointsData,
+    );
+
+  //Method for validating the token in every endpoint request
+  Future<T> _getDataRefreshingToken<T>({Future<T> Function() onGetData}) async {
+    try {
       if (_accessToken == null) {
         _accessToken = await apiService.getAccessToken();
       }
-      return await apiService.getEndpointData(
-        accessToken: _accessToken, endpoint: endpoint);
+      return await onGetData();
 
     } on Response catch (response) {
       //If unathorized, get token again
       if (response.statusCode == 401) {
         _accessToken = await apiService.getAccessToken();
-        return await apiService.getEndpointData(
-          accessToken: _accessToken, endpoint: endpoint);
+        return await onGetData();
       } 
       rethrow;
     }
   }
 
+  //Method with all the needed endpoint request
   Future<EndpointsData> _getAllEndpointsData() async {
+    //Future.wait to make parallel requests instead of sequential requests
     final values = await Future.wait([
       apiService.getEndpointData(
         accessToken: _accessToken, endpoint: Endpoint.cases),
@@ -44,6 +59,7 @@ class DataRepository {
         accessToken: _accessToken, endpoint: Endpoint.recovered),
     ]);
 
+    //Return EndpointsData object
     return EndpointsData(
       values: {
         Endpoint.cases: values[0],
