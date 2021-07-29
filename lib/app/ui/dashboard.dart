@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:coronavirus_rest_api_flutter_course/app/repositories/data_repository.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/repositories/endpoints_data.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/services/api.dart';
@@ -25,9 +27,13 @@ class _DashboardState extends State<Dashboard> {
   //Context can always be used inside a State method.
   //Listen: false to avoid register Dashboard as a listener 
   Future<void> _updateData() async {
-    final dataRepository = Provider.of<DataRepository>(context, listen: false);
-    final endpointsData = await dataRepository.getAllEndpointData();
-    setState(() => _endpointsData = endpointsData);
+    try {
+      final dataRepository = Provider.of<DataRepository>(context, listen: false);
+      final endpointsData = await dataRepository.getAllEndpointData();
+      setState(() => _endpointsData = endpointsData);
+    } on SocketException catch (e) {
+      print(e);
+    };
   }
 
   @override
