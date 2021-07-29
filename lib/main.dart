@@ -64,13 +64,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Future _getCases() async {
     final apiService = APIService(API.sandbox());
     final dataResult = await apiService.getEndpointData(accessToken: _accessToken, endpoint: Endpoint.cases);
-    setState(() => _casesNumber = dataResult);
+    setState(() => _casesNumber = dataResult.value);
   }
 
   Future _getDeaths() async {
     final apiService = APIService(API.sandbox());
     final dataResult = await apiService.getEndpointData(accessToken: _accessToken, endpoint: Endpoint.deaths);
-    setState(() => _deaths = dataResult);
+    setState(() => _deaths = dataResult.value);
   }
 
     void _fetchInfo() async {

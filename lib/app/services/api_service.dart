@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:coronavirus_rest_api_flutter_course/app/services/endpoint_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:coronavirus_rest_api_flutter_course/app/services/api.dart';
@@ -24,7 +25,7 @@ class APIService {
     throw response;
   }
 
-  Future<int> getEndpointData({
+  Future<EndpointData> getEndpointData({
     @required String accessToken,
     @required Endpoint endpoint
   }) async {
@@ -38,13 +39,13 @@ class APIService {
       if (data.isNotEmpty) {
         final Map<String, dynamic> endpointData = data[0];
         final String responseJsonKey = _responseJsonKeys[endpoint];
-        final int result = endpointData[responseJsonKey];
+        final int value = endpointData[responseJsonKey];
         final String dateString = endpointData['date'];
-        //Parse allows varois data format conversion from a given String.
+        //Parse allows several date format conversion from a given String.
         //tryParse works the same as parse but accepts exceptions and returns null if an error is found.
         final date = DateTime.tryParse(dateString);
-        if (result != null) {
-          return result;
+        if (value != null) {
+          return EndpointData(value: value, date: date);
         }
       }
     }
