@@ -1,5 +1,6 @@
 import 'package:coronavirus_rest_api_flutter_course/app/services/api.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 class EndpointCardData {
@@ -33,6 +34,14 @@ class EndpointCard extends StatelessWidget {
       EndpointCardData('Recovered', 'assets/patient.png', Color(0xFF70A901)),
   };
 
+  //Using intl package to format numbers
+  String get formattedValue {
+    if(value == null) {
+      return '';
+    }
+    return NumberFormat('#,###,###,###').format(value);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +70,8 @@ class EndpointCard extends StatelessWidget {
                   children: <Widget>[
                     Image.asset(cardData.assetName, color: cardData.color),
                     Text(
-                      value != null ? value.toString() : '',
+                      // value != null ? value.toString() : '',
+                      formattedValue,
                       style: Theme.of(context)
                           .textTheme
                           .headline4
