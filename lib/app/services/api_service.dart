@@ -39,6 +39,10 @@ class APIService {
         final Map<String, dynamic> endpointData = data[0];
         final String responseJsonKey = _responseJsonKeys[endpoint];
         final int result = endpointData[responseJsonKey];
+        final String dateString = endpointData['date'];
+        //Parse allows varois data format conversion from a given String.
+        //tryParse works the same as parse but accepts exceptions and returns null if an error is found.
+        final date = DateTime.tryParse(dateString);
         if (result != null) {
           return result;
         }
