@@ -2,6 +2,7 @@ import 'package:coronavirus_rest_api_flutter_course/app/repositories/data_reposi
 import 'package:coronavirus_rest_api_flutter_course/app/repositories/endpoints_data.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/services/api.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/ui/endpoint_card.dart';
+import 'package:coronavirus_rest_api_flutter_course/app/ui/last_updated_status_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +40,12 @@ class _DashboardState extends State<Dashboard> {
         onRefresh: _updateData,
         child: ListView(
           children: <Widget>[
+            LastUpdatedStatusText(
+              text: _endpointsData!= null 
+              // ? as a conditional access operator. Safely access members of objects that are not initialized. return null.
+              ? _endpointsData.values[Endpoint.cases].date?.toString() ?? ''
+              : ''
+            ),
             for (var endpoint in Endpoint.values)
             EndpointCard(
               endpoint: endpoint,
