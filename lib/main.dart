@@ -3,9 +3,15 @@ import 'package:coronavirus_rest_api_flutter_course/app/services/api.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/services/api_service.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/ui/dashboard.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  //Change locale settings for Colombia localization. This affects the way dates are formated for example.
+  Intl.defaultLocale = 'es_CO';
+  await initializeDateFormatting();
+  
   runApp(MyApp());
 }
 

@@ -32,6 +32,12 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = LastUpdateDateFormatter(
+      lastUpdated: _endpointsData!= null 
+        ? _endpointsData.values[Endpoint.cases].date 
+        : null
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Coronavirus Tracker'),
@@ -41,10 +47,11 @@ class _DashboardState extends State<Dashboard> {
         child: ListView(
           children: <Widget>[
             LastUpdatedStatusText(
-              text: _endpointsData!= null 
-              // ? as a conditional access operator. Safely access members of objects that are not initialized. return null.
-              ? _endpointsData.values[Endpoint.cases].date?.toString() ?? ''
-              : ''
+              text: formatter.lastUpdatedStatusString(),
+              // text: _endpointsData!= null 
+              // // ? as a conditional access operator. Safely access members of objects that are not initialized. return null.
+              // ? _endpointsData.values[Endpoint.cases].date?.toString() ?? ''
+              // : ''
             ),
             for (var endpoint in Endpoint.values)
             EndpointCard(
