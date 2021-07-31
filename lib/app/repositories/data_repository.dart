@@ -1,13 +1,15 @@
 import 'package:coronavirus_rest_api_flutter_course/app/repositories/endpoints_data.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/services/api_service.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/services/api.dart';
+import 'package:coronavirus_rest_api_flutter_course/app/services/data_cache_service.dart';
 import 'package:coronavirus_rest_api_flutter_course/app/services/endpoint_data.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 class DataRepository {
-  DataRepository({@required this.apiService});
+  DataRepository({@required this.apiService, @required this.dataCacheService});
   final APIService apiService;
+  final DataCacheService dataCacheService;
 
   String _accessToken;
 
@@ -19,12 +21,18 @@ class DataRepository {
         endpoint: endpoint)
     );
 
+  EndpointsData getAllEndpointsCachedData() => dataCacheService.getData();
+
   //Method for calling all endpoints
-  Future<EndpointsData> getAllEndpointData() async =>
-    await _getDataRefreshingToken<EndpointsData>(
+  Future<EndpointsData> getAllEndpointData() async {
+    final endpointsData = await _getDataRefreshingToken<EndpointsData>(
       // onGetData: () => _getAllEndpointsData(), The same as below as the two functions have the same signature. Short hand syntax used.
       onGetData: _getAllEndpointsData,
     );
+    // Save to cache
+    await dataCacheService.setData(endpointsData);
+    return endpointsData;
+  }
 
   //Method for validating the token in every endpoint request
   Future<T> _getDataRefreshingToken<T>({Future<T> Function() onGetData}) async {
