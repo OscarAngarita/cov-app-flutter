@@ -28,6 +28,7 @@ class DataRepository {
 
   //Method for validating the token in every endpoint request
   Future<T> _getDataRefreshingToken<T>({Future<T> Function() onGetData}) async {
+    throw 'error';
     try {
       if (_accessToken == null) {
         _accessToken = await apiService.getAccessToken();
