@@ -34,7 +34,7 @@ class DataCacheService {
         endpointData.value,
       );
       await sharedPreferences.setString(
-        endpointValueKey(endpoint), 
+        endpointDateKey(endpoint), 
         endpointData.date.toIso8601String(),
       );
     });
